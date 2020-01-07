@@ -1,0 +1,13 @@
+{
+  "python.pythonPath": "/Users/zhaozhang/.pyenv/versions/3.8.0/bin/python",
+  "python.testing.unittestArgs": [
+    "-v",
+    "-s",
+    "./ch11",
+    "-p",
+    "test_*.py"
+  ],
+  "python.testing.pytestEnabled": false,
+  "python.testing.nosetestsEnabled": false,
+  "python.testing.unittestEnabled": true
+}

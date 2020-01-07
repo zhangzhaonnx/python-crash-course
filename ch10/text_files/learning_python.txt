@@ -1,0 +1,3 @@
+In Python you can define a varible.
+In Python you can define a string.
+In Python you can define a list.
