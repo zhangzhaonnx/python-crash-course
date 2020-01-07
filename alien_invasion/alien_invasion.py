@@ -19,12 +19,15 @@ def run_game():
 
     # 创建一个用来存储子弹的编组
     bullets = Group()
+    aliens = Group()
+    gf.create_fleet(ai_settings, screen, aliens)
 
-    # 开始游戏的主循环
+
+    # 开始游戏的主循环
     while True:
         gf.check_events(ai_settings, screen, ship, bullets)
         ship.update()
         gf.update_bullets(bullets)
-        gf.update_screen(ai_settings, screen, ship, bullets)
+        gf.update_screen(ai_settings, screen, ship, aliens, bullets)
 
 run_game()
