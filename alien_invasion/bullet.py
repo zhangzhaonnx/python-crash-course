@@ -22,3 +22,12 @@ class Bullet():
         self.color = ai_settings.bullet_color
         self.speed_factor = ai_settings.bullet_speed_factor
 
+    def update(self):
+        """向上移动子弹"""
+        self.float_y -= self.speed_factor
+        self.rect.y = self.float_y
+    
+    def draw_bullet(self):
+        """在屏幕上绘制子弹"""
+        pygame.draw.rect(self.screen, self.color, self.rect)
+
