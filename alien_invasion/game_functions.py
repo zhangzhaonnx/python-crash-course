@@ -65,22 +65,31 @@ def update_bullets(bullets):
     for bullet in bullets.copy():
         if bullet.rect.bottom < 0:
             bullets.remove(bullet)
-def create_fleet(ai_settings, screen, aliens):
-    """创建外星人群"""
-    # 创建一个外星人，并计算一行可容纳多少个外星人
+
+
+def get_number_aliens_x(ai_settings, screen):
+    """计算一行可容纳多少个外星人"""
     # 外星人间距为外星人宽度
-    # 外星人与屏幕边缘的距离最少为外星人宽度
     alien = Alien(ai_settings, screen)
     alien_width = alien.rect.width
     available_space_x = ai_settings.screen_width - 2 * alien_width
     number_aliens_x = int((available_space_x / alien_width + 1) / 2)
-    real_space_x = (2 * number_aliens_x - 1) * alien_width
-    edge_width = (ai_settings.screen_width - real_space_x) / 2
+    return number_aliens_x
+
+
+def create_alien(ai_settings, screen, aliens, alien_number):
+    """创建一个外星人，并加入当前行"""
+    alien = Alien(ai_settings, screen)
+    alien_width = alien.rect.width
+    alien.float_x = alien_width + 2 * alien_width * alien_number
+    alien.rect.x = alien.float_x
+    aliens.add(alien)
+
+
+def create_fleet(ai_settings, screen, aliens):
+    """创建外星人群"""
+    number_aliens_x = get_number_aliens_x(ai_settings, screen)
 
     # 创建第一行外星人
     for alien_number in range(number_aliens_x):
-        # 创建一个外形人，并加入当前行
-        alien = Alien(ai_settings, screen)
-        alien.float_x = edge_width + 2 * alien_width * alien_number
-        alien.rect.x = alien.float_x
-        aliens.add(alien)
+        create_alien(ai_settings, screen, aliens, alien_number)
