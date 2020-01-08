@@ -78,11 +78,15 @@ def get_number_aliens_x(ai_settings, screen, alien_width):
 def create_alien(ai_settings, screen, aliens, alien_number, row_number):
     """创建一个外星人，并加入当前行"""
     alien = Alien(ai_settings, screen)
+
     alien_width = alien.rect.width
     alien.float_x = alien_width + 2 * alien_width * alien_number
     alien.rect.x = alien.float_x
+
     alien_height = alien.rect.height
-    alien.rect.y = alien_height + 2 * alien_height * row_number
+    alien.float_y = alien_height + 2 * alien_height * row_number
+    alien.rect.y = alien.float_y
+
     aliens.add(alien)
 
 
@@ -102,3 +106,22 @@ def get_number_rows(ai_settings, ship_height, alien_height):
     available_space_y = ai_settings.screen_height - 3 * alien_height - ship_height
     number_rows = int((available_space_y / alien_height + 1) / 2)
     return number_rows
+
+def update_aliens(aliens):
+    """更新外星人群的位置"""
+    check_fleet_edges(aliens)
+    aliens.update()
+
+def check_fleet_edges(aliens):
+    """有外星人到达边缘时采取相应的措施"""
+    for alien in aliens.sprites():
+        if (alien.check_edges()):
+            change_fleet_direction(aliens)
+            break
+
+def change_fleet_direction(aliens):
+    """将整群外星人下移，并改变它们的方向"""
+    for alien in aliens.sprites():
+        alien.moving_direction *= -1
+        alien.float_y += alien.drop_speed
+        alien.rect.y = alien.float_y
