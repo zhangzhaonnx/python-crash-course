@@ -11,6 +11,7 @@ class Settings():
 
         # 飞船设置
         self.ship_speed_factor = 3
+        self.ship_limit = 3
 
         # 子弹设置
         self.bullet_speed_factor = 10
@@ -21,4 +22,4 @@ class Settings():
 
         # 外星人设置
         self.alien_speed_factor = 1
-        self.alien_drop_speed = 10
+        self.alien_drop_speed = 50
