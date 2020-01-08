@@ -58,13 +58,21 @@ def update_screen(ai_settings, screen, ship, aliens, bullets):
     pygame.display.flip()
 
 
-def update_bullets(bullets):
+def update_bullets(ai_settings, screen, ship, aliens, bullets):
     """更新子弹的位置，并删除已消失的子弹"""
     bullets.update()
 
     for bullet in bullets.copy():
         if bullet.rect.bottom < 0:
             bullets.remove(bullet)
+
+    # 检查是否有子弹击中外星人，并删除相应的子弹和外星人
+    collisions = pygame.sprite.groupcollide(bullets, aliens, True, True)
+
+    if len(aliens) == 0:
+        # 删除现有的子弹，并新建一群外星人
+        bullets.empty()
+        create_fleet(ai_settings, screen, ship, aliens)
 
 
 def get_number_aliens_x(ai_settings, screen, alien_width):
@@ -93,13 +101,16 @@ def create_alien(ai_settings, screen, aliens, alien_number, row_number):
 def create_fleet(ai_settings, screen, ship, aliens):
     """创建外星人群"""
     alien = Alien(ai_settings, screen)
-    number_aliens_x = get_number_aliens_x(ai_settings, screen, alien.rect.width)
-    number_rows = get_number_rows(ai_settings, ship.rect.height, alien.rect.height)
+    number_aliens_x = get_number_aliens_x(
+        ai_settings, screen, alien.rect.width)
+    number_rows = get_number_rows(
+        ai_settings, ship.rect.height, alien.rect.height)
 
     # 创建第一行外星人
     for row_number in range(number_rows):
         for alien_number in range(number_aliens_x):
             create_alien(ai_settings, screen, aliens, alien_number, row_number)
+
 
 def get_number_rows(ai_settings, ship_height, alien_height):
     """计算屏幕可容纳多少行外星人"""
@@ -107,10 +118,12 @@ def get_number_rows(ai_settings, ship_height, alien_height):
     number_rows = int((available_space_y / alien_height + 1) / 2)
     return number_rows
 
+
 def update_aliens(aliens):
     """更新外星人群的位置"""
     check_fleet_edges(aliens)
     aliens.update()
+
 
 def check_fleet_edges(aliens):
     """有外星人到达边缘时采取相应的措施"""
@@ -118,6 +131,7 @@ def check_fleet_edges(aliens):
         if (alien.check_edges()):
             change_fleet_direction(aliens)
             break
+
 
 def change_fleet_direction(aliens):
     """将整群外星人下移，并改变它们的方向"""
