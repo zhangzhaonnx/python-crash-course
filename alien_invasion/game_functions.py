@@ -34,7 +34,7 @@ def check_keyup_events(event, ship):
         ship.moving_left = False
 
 
-def check_events(ai_settings, screen, ship, bullets):
+def check_events(ai_settings, screen, stats, ship, bullets, play_button):
     """响应按键和鼠标事件"""
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -43,6 +43,15 @@ def check_events(ai_settings, screen, ship, bullets):
             check_keydown_events(event, ai_settings, screen, ship, bullets)
         elif event.type == pygame.KEYUP:
             check_keyup_events(event, ship)
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            mouse_x, mouse_y = pygame.mouse.get_pos()
+            check_play_button(stats, play_button, mouse_x, mouse_y)
+
+
+def check_play_button(stats, play_button, mouse_x, mouse_y):
+    """在玩家单击Play按钮时开始新游戏"""
+    if play_button.rect.collidepoint(mouse_x, mouse_y):
+        stats.game_active = True
 
 
 def update_screen(ai_settings, screen, stats, ship, aliens, bullets, play_button):
@@ -72,7 +81,7 @@ def update_bullets(ai_settings, screen, ship, aliens, bullets):
             bullets.remove(bullet)
 
     check_alien_bullet_cllisions(ai_settings, screen, ship, aliens, bullets)
-    
+
 
 def check_alien_bullet_cllisions(ai_settings, screen, ship, aliens, bullets):
     """检查子弹和外星人的碰撞"""
@@ -83,6 +92,7 @@ def check_alien_bullet_cllisions(ai_settings, screen, ship, aliens, bullets):
         # 删除现有的子弹，并新建一群外星人
         bullets.empty()
         create_fleet(ai_settings, screen, ship, aliens)
+
 
 def get_number_aliens_x(ai_settings, screen, alien_width):
     """计算一行可容纳多少个外星人"""
@@ -139,6 +149,7 @@ def update_aliens(ai_settings, stats, screen, ship, aliens, bullets):
 
     check_aliens_bottom(ai_settings, stats, screen, ship, aliens, bullets)
 
+
 def check_aliens_bottom(ai_settings, stats, screen, ship, aliens, bullets):
     """检查是否有外星人到达屏幕底端"""
     for alien in aliens.sprites():
@@ -146,9 +157,10 @@ def check_aliens_bottom(ai_settings, stats, screen, ship, aliens, bullets):
             ship_hit(ai_settings, stats, screen, ship, aliens, bullets)
             break
 
+
 def ship_hit(ai_settings, stats, screen, ship, aliens, bullets):
     "响应被外星人撞到的飞船"
-    if stats.ships_left > 0:
+    if stats.ships_left > 1:
         # 将飞船数减1
         stats.ships_left -= 1
 
@@ -164,6 +176,7 @@ def ship_hit(ai_settings, stats, screen, ship, aliens, bullets):
         sleep(0.5)
     else:
         stats.game_active = False
+
 
 def check_fleet_edges(aliens):
     """有外星人到达边缘时采取相应的措施"""
