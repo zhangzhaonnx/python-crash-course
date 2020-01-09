@@ -13,7 +13,7 @@ class Settings():
         self.ship_limit = 3
 
         # 子弹设置
-        self.bullet_width = 3
+        self.bullet_width = 300
         self.bullet_height = 15
         self.bullet_color = (60, 60, 60)
         self.bullets_allowed = 3
@@ -31,6 +31,9 @@ class Settings():
         self.ship_speed_factor = 1.5
         self.bullet_speed_factor = 3
         self.alien_speed_factor = 1
+
+        # 计分
+        self.alien_points = 50
 
     def increase_speed(self):
         """提高速度设置"""
