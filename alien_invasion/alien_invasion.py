@@ -33,9 +33,9 @@ def run_game():
     gf.create_fleet(ai_settings, screen, ship, aliens)
 
 
-    # 开始游戏的主循环
+    # 开始游戏的主循环 
     while True:
-        gf.check_events(ai_settings, screen, stats, ship, aliens, bullets, play_button)
+        gf.check_events(ai_settings, screen, stats, sb, ship, aliens, bullets, play_button)
 
         if stats.game_active:
             ship.update()
