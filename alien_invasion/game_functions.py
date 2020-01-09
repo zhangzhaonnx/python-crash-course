@@ -75,7 +75,8 @@ def start_game(ai_settings, screen, stats, sb, ship, aliens, bullets, play_butto
     # 重置记分牌图像
     sb.prep_score()
     sb.prep_high_score()
-    sb.prep_level
+    sb.prep_level()
+    sb.prep_ships()
 
     # 清空外星人和子弹
     aliens.empty()
@@ -184,31 +185,33 @@ def get_number_rows(ai_settings, ship_height, alien_height):
     return number_rows
 
 
-def update_aliens(ai_settings, stats, screen, ship, aliens, bullets):
+def update_aliens(ai_settings, stats, sb, screen, ship, aliens, bullets):
     """更新外星人群的位置"""
     check_fleet_edges(aliens)
     aliens.update()
 
     # 检测外星人和飞船之间的碰撞
     if pygame.sprite.spritecollideany(ship, aliens):
-        ship_hit(ai_settings, stats, screen, ship, aliens, bullets)
+        ship_hit(ai_settings, stats, sb, screen, ship, aliens, bullets)
 
-    check_aliens_bottom(ai_settings, stats, screen, ship, aliens, bullets)
+    check_aliens_bottom(ai_settings, stats, sb, screen, ship, aliens, bullets)
 
 
-def check_aliens_bottom(ai_settings, stats, screen, ship, aliens, bullets):
+def check_aliens_bottom(ai_settings, stats, sb, screen, ship, aliens, bullets):
     """检查是否有外星人到达屏幕底端"""
     for alien in aliens.sprites():
         if alien.rect.bottom >= screen.get_rect().bottom:
-            ship_hit(ai_settings, stats, screen, ship, aliens, bullets)
+            ship_hit(ai_settings, stats, sb, screen, ship, aliens, bullets)
             break
 
 
-def ship_hit(ai_settings, stats, screen, ship, aliens, bullets):
+def ship_hit(ai_settings, stats, sb, screen, ship, aliens, bullets):
     "响应被外星人撞到的飞船"
     if stats.ships_left > 1:
         # 将飞船数减1
         stats.ships_left -= 1
+        # 更新记分牌
+        sb.prep_ships()
 
         # 清空外星人和子弹
         aliens.empty()
