@@ -8,9 +8,8 @@ class Alien(Sprite):
     def __init__(self, ai_settings, screen):
         """初始化外星人并设置其起始位置"""
         super().__init__()
+        self.ai_settings = ai_settings
         self.screen = screen
-        self.speed_factor = ai_settings.alien_speed_factor
-        self.drop_speed = ai_settings.alien_drop_speed
 
         # 加载外星人图像，并设置 rect 属性
         self.image = pygame.image.load('images/alien.bmp')
@@ -28,7 +27,7 @@ class Alien(Sprite):
         self.moving_direction = 1
 
     def update(self):
-        self.float_x += self.moving_direction * self.speed_factor
+        self.float_x += self.moving_direction * self.ai_settings.alien_speed_factor
         self.rect.x = self.float_x
 
     def check_edges(self):

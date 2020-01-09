@@ -5,7 +5,7 @@ class Ship():
 
     def __init__(self, ai_settings, screen):
         """初始化飞船并设置其初始位置"""
-        self.speed_factor = ai_settings.ship_speed_factor
+        self.ai_settings = ai_settings
         self.screen = screen
 
         # 加载飞船图像并获取其外接矩形
@@ -22,7 +22,7 @@ class Ship():
         self.moving_left = False
 
         self.center_ship()
-        
+
         # 在飞船的属性float_centerx中存储小数值
         self.float_centerx = float(self.rect.centerx)
 
@@ -30,10 +30,10 @@ class Ship():
         """根据移动标志调整飞船的位置"""
         # 更新飞船的float_centerx值，而不是rect
         if self.moving_right:
-            temp = self.float_centerx + self.speed_factor
+            temp = self.float_centerx + self.ai_settings.ship_speed_factor
             self.float_centerx = min(temp, self.max_centerx)
         if self.moving_left and self.rect.left > 0:
-            temp = self.float_centerx - self.speed_factor
+            temp = self.float_centerx - self.ai_settings.ship_speed_factor
             self.float_centerx = max(temp, self.min_centerx)
 
         # 根据float_centerx更新rect对象

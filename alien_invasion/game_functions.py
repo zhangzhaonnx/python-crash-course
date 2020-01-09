@@ -62,6 +62,9 @@ def check_play_button(ai_settings, screen, stats, ship, aliens, bullets, play_bu
 
 
 def start_game(ai_settings, screen, stats, ship, aliens, bullets, play_button):
+    # 重置游戏设置
+    ai_settings.initialize_dynamic_settings()
+
     # 隐藏光标
     pygame.mouse.set_visible(False)
 
@@ -113,8 +116,9 @@ def check_alien_bullet_cllisions(ai_settings, screen, ship, aliens, bullets):
     collisions = pygame.sprite.groupcollide(bullets, aliens, True, True)
 
     if len(aliens) == 0:
-        # 删除现有的子弹，并新建一群外星人
+        # 删除现有的子弹，加快游戏节奏，并新建一群外星人
         bullets.empty()
+        ai_settings.increase_speed()
         create_fleet(ai_settings, screen, ship, aliens)
 
 
@@ -216,5 +220,5 @@ def change_fleet_direction(aliens):
     """将整群外星人下移，并改变它们的方向"""
     for alien in aliens.sprites():
         alien.moving_direction *= -1
-        alien.float_y += alien.drop_speed
+        alien.float_y += alien.ai_settings.alien_drop_speed
         alien.rect.y = alien.float_y
