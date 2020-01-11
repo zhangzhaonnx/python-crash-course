@@ -77,10 +77,7 @@ def start_game(ai_settings, screen, stats, sb, ship, aliens, bullets, play_butto
     stats.game_active = True
 
     # 重置记分牌图像
-    sb.prep_score()
-    sb.prep_high_score()
-    sb.prep_level()
-    sb.prep_ships()
+    sb.prep_images()
 
     # 清空外星人和子弹
     aliens.empty()
@@ -135,14 +132,19 @@ def check_alien_bullet_cllisions(ai_settings, screen, stats, sb, ship, aliens, b
         check_high_score(stats, sb)
 
     if len(aliens) == 0:
-        # 删除现有的子弹，加快游戏节奏，并新建一群外星人
-        bullets.empty()
-        ai_settings.increase_speed()
-        create_fleet(ai_settings, screen, ship, aliens)
+        start_new_level(ai_settings, screen, stats, sb, ship, aliens, bullets)
+        
 
-        # 提高等级
-        stats.level += 1
-        sb.prep_level()
+def start_new_level(ai_settings, screen, stats, sb, ship, aliens, bullets):
+    """开始新等级"""
+    # 删除现有的子弹，加快游戏节奏，并新建一群外星人
+    bullets.empty()
+    ai_settings.increase_speed()
+    create_fleet(ai_settings, screen, ship, aliens)
+
+    # 提高等级
+    stats.level += 1
+    sb.prep_level()
 
 
 def get_number_aliens_x(ai_settings, screen, alien_width):
